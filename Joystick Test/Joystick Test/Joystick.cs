@@ -30,7 +30,7 @@ namespace Joystick_Test
 
 
         private int[] PrevStatus = new int[XUSER_MAX_COUNT];            // -1 : initialize, 0 : disconnect, 1 : connect
-        private int[] PrevPacketNumbers = new int[XUSER_MAX_COUNT];
+        private UInt32[] PrevPacketNumbers = new UInt32[XUSER_MAX_COUNT];
         private UInt16[] PrevButton = new UInt16[XUSER_MAX_COUNT];
 
 
@@ -280,7 +280,7 @@ namespace Joystick_Test
                 logger.Debug("index = " + index + ", packet number = " + state.dwPacketNumber);
                 if (this.PrevPacketNumbers[index] != state.dwPacketNumber)
                 {
-                    logger.Debug(String.Format("[{0}] Gamepad state changed.", index));
+                    logger.Debug(String.Format("[{0}] Gamepad state changed. Button = {1}. Left Trigger = {2}. Right Trigger = {3}", index, state.Gamepad.wButtons, state.Gamepad.bLeftTrigger, state.Gamepad.bRightTrigger));
 
 
                     if (IsButtonDown(index, state.Gamepad.wButtons, XInputButton.UP))
@@ -353,6 +353,12 @@ namespace Joystick_Test
                         if (OnButtonDown != null)
                             OnButtonDown(this, index, XInputButton.Y);
                     }
+
+
+
+
+                    this.PrevPacketNumbers[index] = state.dwPacketNumber;
+                    this.PrevButton[index] = state.Gamepad.wButtons;
                 }
             }
             else
