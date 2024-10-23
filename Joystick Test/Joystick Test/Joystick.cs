@@ -358,13 +358,17 @@ namespace Joystick_Test
                         if (OnButtonDown != null)
                             OnButtonDown(this, index, XInputButton.Y);
                     }
-                    if ((state.Gamepad.bLeftTrigger > 0) && (this.PrevLeftTrigger[index] != state.Gamepad.bLeftTrigger))
+                    if ((state.Gamepad.bLeftTrigger > XInputThresholds.TRIGGER_THRESHOLD) && (this.PrevLeftTrigger[index] != state.Gamepad.bLeftTrigger))
                     {
+                        logger.Debug(String.Format("[{0}] {1} button down.", index, ButtonName(XInputButton.LEFT_TRIGGER)));
+
                         if (OnButtonDown != null)
                             OnButtonDown(this, index, XInputButton.LEFT_TRIGGER);
                     }
-                    if ((state.Gamepad.bRightTrigger > 0) && (this.PrevRightTrigger[index] != state.Gamepad.bRightTrigger))
+                    if ((state.Gamepad.bRightTrigger > XInputThresholds.TRIGGER_THRESHOLD) && (this.PrevRightTrigger[index] != state.Gamepad.bRightTrigger))
                     {
+                        logger.Debug(String.Format("[{0}] {1} button down.", index, ButtonName(XInputButton.RIGHT_TRIGGER)));
+
                         if (OnButtonDown != null)
                             OnButtonDown(this, index, XInputButton.RIGHT_TRIGGER);
                     }
