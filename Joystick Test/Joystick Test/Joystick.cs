@@ -32,6 +32,8 @@ namespace Joystick_Test
         private int[] PrevStatus = new int[XUSER_MAX_COUNT];            // -1 : initialize, 0 : disconnect, 1 : connect
         private UInt32[] PrevPacketNumbers = new UInt32[XUSER_MAX_COUNT];
         private UInt16[] PrevButton = new UInt16[XUSER_MAX_COUNT];
+        private byte[] PrevLeftTrigger = new byte[XUSER_MAX_COUNT];
+        private byte[] PrevRightTrigger = new byte[XUSER_MAX_COUNT];
 
 
         /// <summary>
@@ -68,6 +70,9 @@ namespace Joystick_Test
             public static UInt16 B = 0x2000;
             public static UInt16 X = 0x4000;
             public static UInt16 Y = 0x8000;
+
+            public static UInt16 LEFT_TRIGGER = 0x0400;         // Out of specification settings. for internal use only.
+            public static UInt16 RIGHT_TRIGGER = 0x0800;        // Out of specification settings. for internal use only.
         }
 
         /// <summary>
@@ -353,12 +358,21 @@ namespace Joystick_Test
                         if (OnButtonDown != null)
                             OnButtonDown(this, index, XInputButton.Y);
                     }
-
-
-
+                    if ((state.Gamepad.bLeftTrigger > 0) && (this.PrevLeftTrigger[index] != state.Gamepad.bLeftTrigger))
+                    {
+                        if (OnButtonDown != null)
+                            OnButtonDown(this, index, XInputButton.LEFT_TRIGGER);
+                    }
+                    if ((state.Gamepad.bRightTrigger > 0) && (this.PrevRightTrigger[index] != state.Gamepad.bRightTrigger))
+                    {
+                        if (OnButtonDown != null)
+                            OnButtonDown(this, index, XInputButton.RIGHT_TRIGGER);
+                    }
 
                     this.PrevPacketNumbers[index] = state.dwPacketNumber;
                     this.PrevButton[index] = state.Gamepad.wButtons;
+                    this.PrevLeftTrigger[index] = state.Gamepad.bLeftTrigger;
+                    this.PrevRightTrigger[index] = state.Gamepad.bRightTrigger;
                 }
             }
             else
@@ -432,6 +446,10 @@ namespace Joystick_Test
                 result = "X";
             else if (button == XInputButton.Y)
                 result = "Y";
+            else if (button == XInputButton.LEFT_TRIGGER)
+                result = "Left Trigger";
+            else if (button == XInputButton.RIGHT_TRIGGER)
+                result = "Right Trigger";
             else
                 result = "Unknown";
 
